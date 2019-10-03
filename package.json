@@ -14,7 +14,10 @@
     "otp",
     "sms",
     "verification",
-    "cryptography"
+    "cryptography",
+    "smsverify",
+    "emailverify",
+    "2fa"
   ],
   "author": "Anam Ahmed (me@anam.co)",
   "license": "MIT",
