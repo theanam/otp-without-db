@@ -4,11 +4,11 @@
   "description": "OTP verification with only cryptography and no database",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/theanam/otp-without-db.git"
+    "url": "git://git@github.com/theanam/otp-without-db.git"
   },
   "keywords": [
     "otp",
