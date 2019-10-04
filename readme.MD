@@ -18,7 +18,7 @@ You can use npm to install the package with the following code
 
 #### Usage
 
-You need additional tool to crete OTP, and send SMS, This module only takes care of the verification part. 
+You need additional tool to create OTP, and send SMS. This module only takes care of the verification part. 
 
 You can take a look at the [otp-generator](https://www.npmjs.com/package/otp-generator) module to create OTP for your users.
 
@@ -26,28 +26,28 @@ You can take a look at the [otp-generator](https://www.npmjs.com/package/otp-gen
 
 OTP verification is done in the following steps:
 
-1. A hash is created with the phone number/email address and the then sent to the user. 
+1. A hash is created with the phone number/email address and then sent to the user. 
 
 2. The user also receives the OTP via SMS, email or any other method. 
 
-3. The sends back the hash, otp and phone/email used in the first request. 
+3. The user sends back the hash, OTP and phone/email used in the first request. 
 
 4. The server verifies the information and returns true if they match.
 
 #### Generating OTP Hash
 
-We will use the [otp-generator](https://www.npmjs.com/package/otp-generator) tool mentioned previously to create OTP. You can use any other too or technique.
+We will use the [otp-generator](https://www.npmjs.com/package/otp-generator) tool mentioned previously to create OTP. You can use any other tool or technique.
 
     const otpGen  = require("otp-generator");
     const otpTool = require("otp-without-db"); 
     const key     = "secretKey"; // Use unique key and keep it secret
     
     let phone = "88017009090";  
-    let otp   = otpGen.generate(6, { upperCase: false, specialChars: false,alphabets: false });  
+    let otp   = otpGen.generate(6, { upperCase: false, specialChars: false, alphabets: false });  
 
     let hash = otpTool.createNewOTP(phone,otp,key);
 
-You can then send this hash to the user as response. The generate function takes these following arguments (In particular order),
+You can then send this hash to the user as response. The generate method takes these following arguments (In particular order),
 
     createNewOTP(phoneOrEmail,otp,key="",expiresAfter=5,algorithm="sha256")
 
@@ -62,15 +62,15 @@ You can then send this hash to the user as response. The generate function takes
 
 #### Verifying OTP hash
 
-The user should get the hash from the HTTP request. and should get the real OTP via phone or email. 
+The user should get the hash from the HTTP request and should get the real OTP via SMS or email.
 
 Then when the user sends back the information, they can be verified with the following code:
 
     otpTool.verifyOTP(phone,otp,hash,key);
 
-This function returns a **Boolean**. if the verification is successful it will return true.
+This method returns a **Boolean**. If the verification is successful, it will return true.
 
-This function also takes the following arguments in particular order: 
+This method also takes the following arguments in particular order: 
 
     verifyOTP(phone,otp,hash,key="",algorithm="sha256")
 
