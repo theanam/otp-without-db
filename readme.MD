@@ -34,6 +34,10 @@ OTP verification is done in the following steps:
 
 4. The server verifies the information and returns true if they match.
 
+Here's a diagram that shows the whole process:
+
+![OTP Verification process](https://blog.anam.co/content/images/2019/10/Untitled-Diagram.jpg)
+
 #### Generating OTP Hash
 
 We will use the [otp-generator](https://www.npmjs.com/package/otp-generator) tool mentioned previously to create OTP. You can use any other tool or technique.
