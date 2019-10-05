@@ -1,7 +1,7 @@
 {
   "name": "otp-without-db",
-  "version": "1.0.0",
-  "description": "OTP verification with only cryptography and no database",
+  "version": "1.0.1",
+  "description": "Database less verification with cryptography",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
