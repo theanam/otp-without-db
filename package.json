@@ -1,7 +1,7 @@
 {
   "name": "otp-without-db",
-  "version": "1.0.2",
-  "description": "Database less verification with cryptography",
+  "version": "1.0.3",
+  "description": "Database less OTP verification with cryptography",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
@@ -19,7 +19,10 @@
     "emailverify",
     "2fa"
   ],
-  "author": "Anam Ahmed (me@anam.co)",
+  "author": {
+    "name": "Anam Ahmed",
+    "email": "me@anam.co"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/theanam/otp-without-db/issues"
