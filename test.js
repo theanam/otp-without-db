@@ -1,6 +1,6 @@
 const otpTool = require("./index");
 
-const phone   = "8801751205455";
+const phone   = "8801711223344";
 const key     = "verysecret";
 const otp     = 1234;
 
