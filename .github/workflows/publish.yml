@@ -2,17 +2,39 @@ name: Publish to NPM
 
 on:
   push:
-   branches: [master]
+    branches: [master]
+
+permissions:
+  contents: read
+  id-token: write # Required for npm trusted publishing (OIDC)
 
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          node-version: 12
+          node-version: 24
           registry-url: https://registry.npmjs.org/
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+      # Trusted publishing needs npm 11.5.1 or newer
+      - run: npm install -g npm@latest
+
+      - run: npm test
+
+      - name: Skip if this version is already on npm
+        id: check
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "$NAME@$VERSION already published, skipping"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.check.outputs.publish == 'true'
+        run: npm publish --provenance --access public
