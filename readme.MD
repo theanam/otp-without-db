@@ -88,6 +88,16 @@ This method also takes the following arguments in particular order:
 | algorithm     | false    | `sha256`| Algorithm used for hashing the data. Any supported algorithm from OpenSSL|
 
 
+#### Security notes
+
+This module is stateless by design. That keeps it simple, but it also means a few protections **must** live in your application, because the library has no memory of what it issued or how many times a hash has been tried.
+
+**Rate limit verification.** Verifying a hash is a single HMAC and is extremely cheap, so an attacker who holds a valid hash can guess OTPs as fast as your API will answer. A 6 digit OTP has one million possibilities. Limit `verifyOTP` calls per phone/email (or per hash) in your API layer, for example with an in-memory counter, Redis, or your web framework's rate limiter, and lock out after a small number of failures. Shorter `expiresAfter` values and longer OTPs also shrink the window.
+
+**Throttle OTP creation.** If you want to stop the same phone/email from requesting a new OTP every second, that has to be tracked by your application too. It cannot be embedded in the hash, because the client can simply discard the old hash and ask again.
+
+**The hash is not a secret from the user, the key is.** The hash, expiry and salt are sent to the user in plain text. That is fine: without the secret `key` nobody can forge a valid hash, and collecting many hashes does not reveal the key. Keep the key private, make it long and random, and rotate it if it leaks.
+
 ****** 
 
 This product is created with 🖤 by [Anam Ahmed](https://anam.co), Any improvements and PR is welcome.

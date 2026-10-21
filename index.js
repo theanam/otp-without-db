@@ -38,20 +38,21 @@ function createNewOTP(phone,otp,key="",expiresAfter=5,algorithm="sha256"){
  * @returns {boolean} - Whether the OTP is verified or not.
  */
 function verifyOTP(phone,otp,hash,key="",algorithm="sha256"){
-    if(!hash.match(".")) return false; // Hash should have at least one dot
-    // Seperate Hash value and expires from the hash returned from the user(
+    if(typeof hash !== "string") return false; // Guard against missing or non-string input
+    // Seperate Hash value, expires and salt from the hash returned from the user
     let [hashValue,expires,salt] = hash.split(".");
+    if(!hashValue || !expires || !salt) return false; // Hash must have all three parts
     // Check if expiry time has passed
     let now = Date.now();
     if(now>expires) return false;
     // Calculate new hash with the same key and the same algorithm
     let data = `${phone}.${otp}.${expires}.${salt}`;
     let newCalculatedHash = crypto.createHmac(algorithm,key).update(data).digest("hex");
-    // Match the hashes
-    if(newCalculatedHash === hashValue){
-        return true;
-    } 
-    return false;
+    // Match the hashes in constant time so the comparison does not leak timing information
+    let expected = Buffer.from(newCalculatedHash);
+    let received = Buffer.from(hashValue);
+    if(expected.length !== received.length) return false;
+    return crypto.timingSafeEqual(expected,received);
 }
 
 module.exports = {
